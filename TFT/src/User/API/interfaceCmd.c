@@ -500,6 +500,7 @@ void sendQueueCmd(void)
 
         case 106: //M106
         {
+          if(!fromTFT)   {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
           if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
             fanSetSpeed(i, cmd_value());
@@ -511,14 +512,17 @@ void sendQueueCmd(void)
             sprintf(buf, "S%u\n", fanGetSpeed(i));
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
           }
+          }
           break;
         }
 
         case 107: //M107
         {
+          if(!fromTFT) {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
           if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
           break;
+          }
         }
         
         case 710: //M710 Controller Fan
