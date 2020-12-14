@@ -109,6 +109,9 @@ void drawToast(bool redraw)
 //check and control toast notification display
 void loopToast(void)
 {
+  if(getMenuType() == MENU_TYPE_FULLSCREEN)
+    return;
+
   if (OS_GetTimeMs() > nextToastTime)
   {
     if (toastAvailable())
@@ -117,10 +120,12 @@ void loopToast(void)
     }
     else if(_toastRunning == true)
     {
-    _toastRunning = false;
-    GUI_ClearPrect(&toastIconRect);
-    GUI_ClearPrect(&toastRect);
+      _toastRunning = false;
+
+      GUI_ClearPrect(&toastIconRect);
+      GUI_ClearPrect(&toastRect);
       menuReDrawCurTitle();
+
     }
   }
 }

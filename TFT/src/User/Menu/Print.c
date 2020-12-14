@@ -211,11 +211,10 @@ const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ER
 void menuPrintFromSource(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
   u8 update=0;
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
@@ -233,7 +232,7 @@ void menuPrintFromSource(void)
     if(infoFile.source == BOARD_SD)
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
     else
-      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
     Delay_ms(1000);
     infoMenu.cur--;
   }
@@ -306,10 +305,10 @@ void menuPrintFromSource(void)
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (u8* )((infoFile.source == BOARD_SD) ? infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
             //confirm file selction
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
-                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, ExitDir, NULL);
+            setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
           }
         }
 
